@@ -10,12 +10,19 @@ export class User {
     @Column()
     username: string;
 
-    @OneToMany(() => Event, (event) => event.organizer)
+    @Column({ unique: true })
+    email: string;
+
+    @Column()
+    password: string;
+
+    @OneToMany(() => Event, (event) => event.organizer, {onDelete: 'CASCADE'})
     events: Event[];
 
-    @OneToMany(() => Car, (car) => car.driver)
+    @OneToMany(() => Car, (car) => car.driver, {onDelete: 'CASCADE'})
     cars_as_driver: Car[];
 
     @ManyToMany(() => Car, (car) => car.passengers)
     cars_as_passenger: Car[];
+
 }

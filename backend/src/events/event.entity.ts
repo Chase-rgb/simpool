@@ -16,7 +16,7 @@ export class Event {
     @Column({ nullable: true })
     description: string;
 
-    @ManyToOne(() => User, user => user.events)
+    @ManyToOne(() => User, user => user.events, {onDelete: 'CASCADE'})
     organizer: User;
 
     @OneToMany(() => Car, (car) => car.event)

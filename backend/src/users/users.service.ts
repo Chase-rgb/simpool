@@ -1,11 +1,17 @@
 
-import { Injectable } from '@nestjs/common';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
+import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import * as bcryptjs from 'bcryptjs';
+import { DataSource } from 'typeorm';
+import { User } from './user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    private dataSource: DataSource,
+  ) {}
+
+
   private readonly users = [
     {
       userId: 1,
@@ -19,7 +25,46 @@ export class UsersService {
     },
   ];
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+  async findOne(email: string): Promise<User | null> {
+    if (email == null) {
+      throw new Error('Email cannot be null');
+    }
+    return await this.dataSource.getRepository(User).findOne({
+      where: { email },
+    });
   }
+
+
+  async createUser(creatUserDto: CreateUserDto): Promise<User> {
+    return this.dataSource.transaction(async (manager) => {
+      const existingUser = await manager.findOne(User, {
+        where: { username: creatUserDto.email },
+      });
+      if (existingUser) {
+        throw new ConflictException('User already exists');
+      }
+
+      const hashedPassword = await bcryptjs.hash(creatUserDto.password, 10);
+      const newUser = manager.create(User, {
+        username: creatUserDto.username,
+        password: hashedPassword,
+        email: creatUserDto.email,
+      });
+
+      const savedUser = await manager.save(newUser);
+      return savedUser;
+    }
+  );
+}
+
+  async clearUsers(): Promise<void> {
+    await this.dataSource.transaction(async (manager) => {
+      await manager.delete(User, {}); // Delete all users
+    });
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await this.dataSource.getRepository(User).find();
+  }
+
 }

@@ -6,10 +6,10 @@ export class Car {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Event, (event) => event.cars)
+    @ManyToOne(() => Event, (event) => event.cars, {onDelete: 'CASCADE'})
     event: Event;
 
-    @ManyToOne(() => User, (user) => user.cars_as_driver)
+    @ManyToOne(() => User, (user) => user.cars_as_driver, {onDelete: 'CASCADE'})
     driver: User;
     
     @Column({ nullable: true })
