@@ -1,5 +1,5 @@
 
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcryptjs from 'bcryptjs';
 import { DataSource } from 'typeorm';
 import { User } from './user.entity';
@@ -7,10 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private dataSource: DataSource,
-  ) {}
-
+  constructor(private dataSource: DataSource) {}
 
   private readonly users = [
     {
@@ -25,20 +22,20 @@ export class UsersService {
     },
   ];
 
-  async findOne(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<User | null> {
     if (email == null) {
       throw new Error('Email cannot be null');
     }
-    return await this.dataSource.getRepository(User).findOne({
+    const result = await this.dataSource.getRepository(User).findOne({
       where: { email },
     });
+    return result;
   }
-
 
   async createUser(creatUserDto: CreateUserDto): Promise<User> {
     return this.dataSource.transaction(async (manager) => {
       const existingUser = await manager.findOne(User, {
-        where: { username: creatUserDto.email },
+        where: { email: creatUserDto.email },
       });
       if (existingUser) {
         throw new ConflictException('User already exists');
@@ -50,7 +47,6 @@ export class UsersService {
         password: hashedPassword,
         email: creatUserDto.email,
       });
-
       const savedUser = await manager.save(newUser);
       return savedUser;
     }

@@ -14,6 +14,11 @@ services:
       - .env
     depends_on:
       - db
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
 
   db:
     image: postgres:17.4-alpine3.21
