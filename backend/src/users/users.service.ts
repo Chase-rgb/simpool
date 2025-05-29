@@ -1,4 +1,3 @@
-
 import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcryptjs from 'bcryptjs';
 import { DataSource } from 'typeorm';
@@ -49,9 +48,8 @@ export class UsersService {
       });
       const savedUser = await manager.save(newUser);
       return savedUser;
-    }
-  );
-}
+    });
+  }
 
   async clearUsers(): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
@@ -62,5 +60,4 @@ export class UsersService {
   async getAllUsers(): Promise<User[]> {
     return await this.dataSource.getRepository(User).find();
   }
-
 }

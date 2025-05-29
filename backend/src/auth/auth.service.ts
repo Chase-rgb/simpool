@@ -10,6 +10,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Validates a user by checking their email and password.
+   * If the user is found and the password matches, it returns an access token.
+   * If the user is not found or the password is incorrect, it throws an UnauthorizedException.
+   *
+   * @param email - The email of the user to validate.
+   * @param pass - The password of the user to validate.
+   * @returns An object containing the access token if validation is successful.
+   */
   async validateUser(email: string, pass: string): Promise<object | null> {
     const dbUser = await this.usersService.findByEmail(email);
     if (!dbUser) {
@@ -18,7 +27,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     } else {
       const payload = {
-        sub: dbUser.id,
+        userId: dbUser.id,
         username: dbUser.username,
         email: dbUser.email,
       };
