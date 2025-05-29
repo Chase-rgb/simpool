@@ -27,7 +27,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     } else {
       const payload = {
-        userId: dbUser.id,
+        userId: dbUser.user_id,
         username: dbUser.username,
         email: dbUser.email,
       };

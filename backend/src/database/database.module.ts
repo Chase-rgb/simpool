@@ -2,9 +2,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Car } from 'src/cars/car.entity';
-import { User } from 'src/users/user.entity';
-import { Event } from 'src/events/event.entity';
+import { Car } from 'src/database/entities/car.entity';
+import { User } from 'src/database/entities/user.entity';
+import { Event } from 'src/database/entities/event.entity';
+import { PassengerAssignment } from './entities/passenger-assignment.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { Event } from 'src/events/event.entity';
           password: configService.getOrThrow('POSTGRES_PASSWORD'),
           database: configService.getOrThrow('POSTGRES_DB'),
           autoLoadEntities: true,
-          entities: [User, Event, Car],
+          entities: [User, Event, Car, PassengerAssignment],
           synchronize: configService.getOrThrow('POSTGRES_SYNCHRONIZE'),
         };
       }, 

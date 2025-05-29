@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { User } from '../database/entities/user.entity';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
 
   @Post('createUser')
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User | null> {
@@ -45,10 +45,11 @@ export class UsersController {
       if (error instanceof HttpException) {
         throw error;
       } else {
-        throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     }
   }
-
-
 }
