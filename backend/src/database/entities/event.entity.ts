@@ -3,6 +3,7 @@ import { User } from 'src/database/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -27,12 +28,13 @@ export class Event {
   description: string;
 
   @ManyToOne(() => User, (user) => user.events, { onDelete: 'CASCADE' })
-  organizer_id: User;
+  @JoinColumn({ name: 'organizer_user_id' }) // This is setting up a column that maps val of this column to user through the primary key defined in events.service
+  organizer: User;
 
-  @OneToMany(() => Car, (car) => car.driver_id, { onDelete: 'CASCADE' })
+  @OneToMany(() => Car, (car) => car.driver, { onDelete: 'CASCADE' })
   cars: Car[];
 
-  @OneToMany(() => PassengerAssignment, (assignment) => assignment.event_id, {
+  @OneToMany(() => PassengerAssignment, (assignment) => assignment.event, {
     onDelete: 'CASCADE',
   })
   passenger_assignments: PassengerAssignment[];

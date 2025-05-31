@@ -17,14 +17,14 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Event, (event) => event.organizer_id, {
+  @OneToMany(() => Event, (event) => event.organizer, {
     onDelete: 'CASCADE',
   })
   events: Event[];
 
-  @OneToMany(() => Car, (car) => car.driver_id, { onDelete: 'CASCADE' })
+  @OneToMany(() => Car, (car) => car.driver, { onDelete: 'CASCADE' })
   cars: Car[];
 
-  @OneToMany(() => PassengerAssignment, (assignment) => assignment.passenger_id)
+  @OneToMany(() => PassengerAssignment, (assignment) => assignment.passenger)
   passenger_assignments: PassengerAssignment[];
 }

@@ -5,13 +5,14 @@ import {
   ManyToOne,
   OneToMany,
   Unique,
+  JoinColumn,
 } from 'typeorm';
 import { Event } from 'src/database/entities/event.entity';
 import { User } from 'src/database/entities/user.entity';
 import { PassengerAssignment } from './passenger-assignment.entity';
 
 @Entity()
-@Unique(['event_id', 'driver_id']) // Ensures one person can only drive 1 car per event
+@Unique(['event', 'driver']) // Ensures one person can only drive 1 car per event
 export class Car {
   @PrimaryGeneratedColumn()
   car_id: number;
@@ -19,14 +20,16 @@ export class Car {
   @Column({ nullable: true })
   description: string;
 
-  @OneToMany(() => PassengerAssignment, (assignment) => assignment.car_id, {
+  @OneToMany(() => PassengerAssignment, (assignment) => assignment.car, {
     onDelete: 'CASCADE',
   })
   passenger_assignments: PassengerAssignment[];
 
   @ManyToOne(() => Event, (event) => event.cars, { onDelete: 'CASCADE' })
-  event_id: Event;
+  @JoinColumn({ name: 'event_id' })
+  event: Event;
 
   @ManyToOne(() => User, (user) => user.cars, { onDelete: 'CASCADE' })
-  driver_id: User;
+  @JoinColumn({ name: 'driver_user_id' })
+  driver: User;
 }

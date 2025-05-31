@@ -8,19 +8,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersService {
   constructor(private dataSource: DataSource) {}
 
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
-
   async findByEmail(email: string): Promise<User | null> {
     if (email == null) {
       throw new Error('Email cannot be null');

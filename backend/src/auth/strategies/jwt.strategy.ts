@@ -15,6 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   // This method is what get's attached to the `@Request: req.user` object when the token is valid
   async validate(payload: any) {
-    return { userId: payload.userId, username: payload.username };
+    return { user_id: payload.user_id, username: payload.username };
   }
 }
