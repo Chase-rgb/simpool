@@ -8,13 +8,15 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 // import { JwtModule } from '@nestjs/jwt';
 import { EventsModule } from './events/events.module';
+import { CarsModule } from './cars/cars.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../.env' }),
     UsersModule,
     AuthModule,
     DatabaseModule,
-    EventsModule
+    EventsModule,
+    CarsModule
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
