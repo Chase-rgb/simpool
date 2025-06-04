@@ -12,10 +12,7 @@ import { PassengerAssignment } from './passenger-assignment.entity';
 
 @Entity()
 export class Event {
-  @PrimaryGeneratedColumn()
-  event_id: number;
-
-  @Column({ type: 'uuid', unique: true, default: () => 'gen_random_uuid()' })
+  @PrimaryGeneratedColumn('uuid')
   event_uuid: string;
 
   @Column()
@@ -30,7 +27,10 @@ export class Event {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @ManyToOne(() => User, (user) => user.events, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.events, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   @JoinColumn({ name: 'organizer_user_id' }) // This is setting up a column that maps val of this column to user through the primary key defined in events.service
   organizer: User;
 

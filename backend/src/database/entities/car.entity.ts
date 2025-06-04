@@ -25,11 +25,17 @@ export class Car {
   })
   passenger_assignments: PassengerAssignment[];
 
-  @ManyToOne(() => Event, (event) => event.cars, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'event_id' })
+  @ManyToOne(() => Event, (event) => event.cars, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
+  @JoinColumn({ name: 'event_uuid' })
   event: Event;
 
-  @ManyToOne(() => User, (user) => user.cars, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.cars, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   @JoinColumn({ name: 'driver_user_id' })
   driver: User;
 }

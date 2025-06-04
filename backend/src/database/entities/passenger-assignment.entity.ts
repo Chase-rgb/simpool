@@ -30,6 +30,6 @@ export class PassengerAssignment {
   @ManyToOne(() => Event, (event) => event.passenger_assignments, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'event_id' })
+  @JoinColumn({ name: 'event_uuid' })
   event: Event;
 }
